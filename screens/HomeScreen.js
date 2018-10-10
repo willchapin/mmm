@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
+import { AsyncStorage, Button, Text, View, StyleSheet } from 'react-native';
 import { MinimalTextInput } from '../components/MinimalTextInput'
 
 export default class LinksScreen extends React.Component {
@@ -25,19 +25,24 @@ export default class LinksScreen extends React.Component {
   };
 
   save = async () => {
+    const [userId, token] = await Promise.all([
+      AsyncStorage.getItem('userId'),
+      AsyncStorage.getItem('token'),
+    ]);
+
     const response = await fetch(
-      'https://4e08607d.ngrok.io/users/26/purchases',
+      `https://4e08607d.ngrok.io/users/${userId}/purchases`,
       {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer 0a4c1aee7e85f92ff95194332489028b',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           description: this.state.description.value,
           cost: this.state.cost.value,
-          tagIds: [0,1,2]
+          tagIds: [0,1,2] // TODO this
         }),
       }
     );

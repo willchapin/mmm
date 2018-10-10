@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, ScrollView, StyleSheet, FlatList } from 'react-native';
+import { AsyncStorage, Text, ScrollView, StyleSheet, FlatList, View } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 
 export default class LinksScreen extends React.Component {
@@ -15,33 +15,53 @@ export default class LinksScreen extends React.Component {
   }
 
   async componentDidMount() {
+    const [userId, token] = await Promise.all([
+      AsyncStorage.getItem('userId'),
+      AsyncStorage.getItem('token'),
+    ]);
 
     const response = await fetch(
-      'https://4e08607d.ngrok.io/users/26/purchases',
+      `https://4e08607d.ngrok.io/users/${userId}/purchases`,
       {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer 0a4c1aee7e85f92ff95194332489028b',
+          'Authorization': `Bearer ${token}`,
         }
       }
     );
 
     const json = await response.json();
 
-    this.setState({
-      purchases: json,
-    });
+    if (!json.error) {
+      this.setState({
+        purchases: json,
+      });
+    }
   }
   
   render() {
 
     return (
       <ScrollView style={styles.container}>
-       <FlatList
+        <FlatList
           data={this.state.purchases}
-          renderItem={({item}) => <Text key={item.id}>{new Date(item.timestamp).toDateString()} | {item.description}</Text>}
+          renderItem={({item}) => {
+            return (
+              <View key={item.id} style={styles.row}>
+                <Text style={{flex: 1}}>
+                  { new Date(item.timestamp).toDateString() }
+                </Text>
+                <Text style={{flex: 1}}>
+                  { item.description }
+                </Text>
+                <Text style={{flex: 1}}>
+                  { item.cost }
+                </Text>
+              </View>
+            );
+          }}
           keyExtractor={(item) => item.id.toString() }
         />
       </ScrollView>
@@ -58,5 +78,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#467',
     width: '100%',
     height: '100%',
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
   },
 });
