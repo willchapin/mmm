@@ -3,15 +3,12 @@ import React from 'react';
 import {
   AsyncStorage,
   TextInput,
-  Text,
-  TouchableOpacity,
-  TouchableHighlight,
+  Button,
   View,
   StyleSheet,
 } from 'react-native';
 
-export class SignInScreen extends React.Component {
-
+export class SignUpScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
@@ -32,7 +29,7 @@ export class SignInScreen extends React.Component {
     });
 
     const response = await fetch(
-      'https://4e08607d.ngrok.io/login',
+      'https://573f7f58.ngrok.io/login',
       {
         method: 'POST',
         headers: {
@@ -59,34 +56,22 @@ export class SignInScreen extends React.Component {
     return (
       <View style={styles.container}>
         <TextInput
-          style={[styles.input, styles.text]} 
+          style={styles.input} 
           autoCorrect={false}
           placeholder="email"
           onChangeText={(email) => this.setState({email})}
           value={this.state.email}
         />
         <TextInput 
-          style={[styles.input, styles.text]} 
+          style={styles.input} 
           autoCorrect={false}
           placeholder="password"
           onChangeText={(password) => this.setState({password})}
           value={this.state.password}
         />
 
-        <TouchableOpacity
-          style={[styles.input, styles.button]} 
-          onPress={this.signin}
-        >
-          <Text style={styles.buttonText}>Sign in</Text>
-        </TouchableOpacity>
-      
-        <View style={styles.signup}>
-          <Text style={styles.signupText}>Not one of us? </Text>
-            <TouchableOpacity onPress={() => {return; this.props.navigation.navigate('SignUp')}}>
-              <Text style={[styles.signupText, styles.signupButton]}>Sign up</Text>
-            </TouchableOpacity>
-          <Text style={styles.signupText}> for an account</Text>
-        </View>
+        <Button title="Sign in!" onPress={this.signin} />
+        <Button title="Sign in!" onPress={this.signin} />
       </View>
     );
   }
@@ -101,32 +86,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   input: {
-    backgroundColor: '#689',
-    padding: 10,
-    borderRadius: 4,
-    marginVertical: 5,
-  },
-  text: {
-    color: '#ccc',
-    fontSize: 20,
-  },
-  button: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#467',
-    fontSize: 20,
-  },
-  signup: {
-    marginTop: 5,
-    flexDirection: 'row',
-  },
-  signupText: {
-    fontWeight: '200',
-    color: '#bbb',
-  },
-  signupButton: {
-    fontWeight: '400',
+    fontSize: 30,
+    fontStyle: 'italic',
+    marginVertical: 10,
+    marginHorizontal: 20,
   },
 });
