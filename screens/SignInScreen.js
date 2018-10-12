@@ -5,7 +5,6 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
-  TouchableHighlight,
   View,
   StyleSheet,
 } from 'react-native';
@@ -60,6 +59,7 @@ export class SignInScreen extends React.Component {
       <View style={styles.container}>
         <TextInput
           style={[styles.input, styles.text]} 
+          keyboardType="email-address"
           autoCorrect={false}
           placeholder="email"
           onChangeText={(email) => this.setState({email})}
@@ -67,6 +67,7 @@ export class SignInScreen extends React.Component {
         />
         <TextInput 
           style={[styles.input, styles.text]} 
+          secureTextEntry={true}
           autoCorrect={false}
           placeholder="password"
           onChangeText={(password) => this.setState({password})}
@@ -82,7 +83,7 @@ export class SignInScreen extends React.Component {
       
         <View style={styles.signup}>
           <Text style={styles.signupText}>Not one of us? </Text>
-            <TouchableOpacity onPress={() => {return; this.props.navigation.navigate('SignUp')}}>
+            <TouchableOpacity onPress={() => {this.props.navigation.navigate('SignUp')}}>
               <Text style={[styles.signupText, styles.signupButton]}>Sign up</Text>
             </TouchableOpacity>
           <Text style={styles.signupText}> for an account</Text>
@@ -91,23 +92,24 @@ export class SignInScreen extends React.Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-    backgroundColor: '#467',
+    backgroundColor: '#6bbce5',
     width: '100%',
     height: '100%',
     justifyContent: 'center'
   },
   input: {
-    backgroundColor: '#689',
+    backgroundColor: '#bbb',
     padding: 10,
     borderRadius: 4,
     marginVertical: 5,
   },
   text: {
-    color: '#ccc',
+    color: '#555',
     fontSize: 20,
   },
   button: {
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#467',
+    color: '#555',
     fontSize: 20,
   },
   signup: {
@@ -124,7 +126,7 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontWeight: '200',
-    color: '#bbb',
+    color: '#555',
   },
   signupButton: {
     fontWeight: '400',

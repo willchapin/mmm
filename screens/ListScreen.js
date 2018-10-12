@@ -1,6 +1,5 @@
 import React from 'react';
 import { AsyncStorage, Text, ScrollView, StyleSheet, FlatList, View } from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
 
 export default class LinksScreen extends React.Component {
   constructor(props) {
@@ -42,7 +41,6 @@ export default class LinksScreen extends React.Component {
   }
   
   render() {
-
     return (
       <ScrollView style={styles.container}>
         <FlatList
@@ -50,14 +48,14 @@ export default class LinksScreen extends React.Component {
           renderItem={({item}) => {
             return (
               <View key={item.id} style={styles.row}>
-                <Text style={{flex: 1}}>
+                <Text style={styles.item}>
+                  { item.cost }
+                </Text>
+                <Text style={styles.item}>
                   { new Date(item.timestamp).toDateString() }
                 </Text>
-                <Text style={{flex: 1}}>
+                <Text style={styles.item}>
                   { item.description }
-                </Text>
-                <Text style={{flex: 1}}>
-                  { item.cost }
                 </Text>
               </View>
             );
@@ -72,17 +70,17 @@ export default class LinksScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: '#467',
+    paddingVertical: 30,
+    paddingHorizontal: 15,
+    backgroundColor: '#6bbce5',
     width: '100%',
     height: '100%',
   },
   row: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
+  },
+  item: {
+    flex: 1,
   },
 });

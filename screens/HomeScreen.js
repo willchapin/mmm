@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     padding: 15,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: '#467',
+    backgroundColor: '#6bbce5',
     width: '100%',
     height: '100%',
   },
