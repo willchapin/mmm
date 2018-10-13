@@ -11,8 +11,7 @@ export class MinimalTextInput extends React.Component {
       onChangeText={this.props.onChangeText}
       value={this.props.value}
       style={{
-        fontSize: 80,
-        fontStyle: 'italic',
+        fontSize: 40,
         fontWeight: '200',
         borderBottomWidth: this.props.error ? 1 : 0,
         borderBottomColor: 'red',

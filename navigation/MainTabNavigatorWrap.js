@@ -22,12 +22,6 @@ export default class MainTabNavigatorWrap extends React.Component {
     };
   }
 
-  updateFieldValue = (name, value) => {
-    const newState = {};
-    newState[name] = {value};
-    this.setState(newState);
-  };
-
   async componentDidMount() {
     const userId = await AsyncStorage.getItem('userId')
 
@@ -42,6 +36,24 @@ export default class MainTabNavigatorWrap extends React.Component {
       });
     }
   }
+
+  updateStateAndReset(purchase) {
+    // add purchase and reset description / cost
+    const purchases = [...this.state.purchases];
+    purchases.push(purchase);
+
+    this.setState({
+      purchases,
+      description: {...this.initialField},
+      cost: {...this.initialField}
+    });
+  }
+
+  updateFieldValue = (name, value) => {
+    const newState = {};
+    newState[name] = {value};
+    this.setState(newState);
+  };
 
   async onSave() {
     const userId = await AsyncStorage.getItem('userId');
@@ -65,21 +77,9 @@ export default class MainTabNavigatorWrap extends React.Component {
 
       this.setState(newState);
     } else {
-      this.updateState(json);
+      this.updateStateAndReset(json);
       this.props.navigation.navigate('ListStack');
     }
-  }
-
-  updateState(purchase) {
-    // add purchase and reset description / cost
-    const purchases = [...this.state.purchases];
-    purchases.push(purchase);
-
-    this.setState({
-      purchases,
-      description: {...this.initialField},
-      cost: {...this.initialField}
-    });
   }
 
   render() {
