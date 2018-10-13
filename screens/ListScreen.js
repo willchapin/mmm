@@ -22,10 +22,10 @@ export default class LinksScreen extends React.Component {
           renderItem={({item}) => {
             return (
               <View key={item.id} style={styles.row}>
-                <Text style={styles.item}>
+                <Text style={{flex: 1}}>
                   { item.cost }
                 </Text>
-                <Text style={styles.item}>
+                <Text style={{flex: 1}}>
                   { item.description }
                 </Text>
                 <Text style={{flex: 2}}>
@@ -53,8 +53,5 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     flexDirection: 'row',
-  },
-  item: {
-    flex: 1,
-  },
+  }
 });

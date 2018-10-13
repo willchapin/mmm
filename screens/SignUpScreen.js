@@ -1,13 +1,6 @@
 import React from 'react';
 
-import {
-  TextInput,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from 'react-native';
-
+import { SignInUp } from '../components/SignInUp';
 import _fetch from '../tasks/fetch';
 
 export class SignUpScreen extends React.Component {
@@ -25,12 +18,11 @@ export class SignUpScreen extends React.Component {
     };
   }
 
-  signin = async () => {
-
+  signUp = async () => {
     const body = JSON.stringify({
-      name: this.state.name,
       email: this.state.email,
       password: this.state.password,
+      name: this.state.name,
     });
 
     try {
@@ -52,83 +44,19 @@ export class SignUpScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <TextInput
-          keyboardType="email-address"
-          style={[styles.input, styles.text]} 
-          autoCorrect={false}
-          placeholder="email"
-          onChangeText={(email) => this.setState({email})}
-          value={this.state.email}
-        />
-        <TextInput 
-          style={[styles.input, styles.text]} 
-          secureTextEntry={true}
-          autoCorrect={false}
-          placeholder="password"
-          onChangeText={(password) => this.setState({password})}
-          value={this.state.password}
-        />
-        <TextInput
-          style={[styles.input, styles.text]} 
-          autoCorrect={false}
-          placeholder="username"
-          onChangeText={(name) => this.setState({name})}
-          value={this.state.name}
-        />
-        <TouchableOpacity
-          style={[styles.input, styles.button]} 
-          onPress={this.signin}
-        >
-          <Text style={styles.buttonText}>Sign up</Text>
-        </TouchableOpacity>
-      
-        <View style={styles.signup}>
-          <Text style={styles.signupText}>Already have an account? </Text>
-            <TouchableOpacity onPress={() => {this.props.navigation.navigate('SignIn')}}>
-              <Text style={[styles.signupText, styles.signupButton]}>Sign in</Text>
-            </TouchableOpacity>
-        </View>
-      </View>
+      <SignInUp
+        navigation={this.props.navigation}
+        showUserName={true}
+        setField={(name, value) => this.setState({[name]: value })}
+        onSubmit={this.signUp}
+        buttonText="Sign up"
+        bottomText={{
+          navigateTo: "SignIn",
+          question: "Already have an account? ",
+          verb: "Sign in",
+          noun: "",
+        }}
+      />
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
-    backgroundColor: '#6bbce5',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center'
-  },
-  input: {
-    backgroundColor: '#bbb',
-    padding: 10,
-    borderRadius: 4,
-    marginVertical: 5,
-  },
-  text: {
-    color: '#555',
-    fontSize: 20,
-  },
-  button: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#555',
-    fontSize: 20,
-  },
-  signup: {
-    marginTop: 5,
-    flexDirection: 'row',
-  },
-  signupText: {
-    fontWeight: '200',
-    color: '#555',
-  },
-  signupButton: {
-    fontWeight: '400',
-  },
-});
