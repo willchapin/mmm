@@ -7,9 +7,11 @@ import _fetch from '../tasks/fetch';
 export default class MainTabNavigatorWrap extends React.Component {
   static router = MainTabNavigator.router;
 
-  initialField = {
-    value: '',
-    error: null
+  getInitialField = () => {
+    return {
+      value: '',
+      error: null
+    };
   }
 
   constructor(props) {
@@ -17,12 +19,12 @@ export default class MainTabNavigatorWrap extends React.Component {
 
     this.state = {
       purchases: [],
-      description: {...this.initialField},
-      cost: {...this.initialField}
+      description: this.getInitialField(),
+      cost: this.getInitialField()
     };
   }
 
-  async componentDidMount() {
+  componentDidMount = async() => {
     const userId = await AsyncStorage.getItem('userId')
 
     const json = await _fetch({
@@ -37,25 +39,19 @@ export default class MainTabNavigatorWrap extends React.Component {
     }
   }
 
-  updateStateAndReset(purchase) {
+  updateStateAndReset = (purchase) => {
     // add purchase and reset description / cost
     const purchases = [...this.state.purchases];
     purchases.push(purchase);
 
     this.setState({
       purchases,
-      description: {...this.initialField},
-      cost: {...this.initialField}
+      description: this.getInitialField(),
+      cost: this.getInitialField()
     });
   }
 
-  updateFieldValue = (name, value) => {
-    const newState = {};
-    newState[name] = {value};
-    this.setState(newState);
-  };
-
-  async onSave() {
+  onSave = async () => {
     const userId = await AsyncStorage.getItem('userId');
 
     const json = await _fetch({
@@ -82,16 +78,20 @@ export default class MainTabNavigatorWrap extends React.Component {
     }
   }
 
+  formatPurchases = (purchase) => {
+    return purchase;
+  }
+
   render() {
     return (
       <MainTabNavigator
         navigation={this.props.navigation}
         screenProps={{
-          purchases: this.state.purchases,
+          purchases: this.formatPurchases(this.state.purchases),
           description: this.state.description,
           cost: this.state.cost,
-          updateFieldValue: this.updateFieldValue.bind(this),
-          onSave: this.onSave.bind(this),
+          updateFieldValue: (name, value) => {this.setState({[name]: value})},
+          onSave: this.onSave,
         }}
       />
     );
