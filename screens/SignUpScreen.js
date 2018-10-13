@@ -1,13 +1,14 @@
 import React from 'react';
 
 import {
-  AsyncStorage,
   TextInput,
   Text,
   TouchableOpacity,
   View,
   StyleSheet,
 } from 'react-native';
+
+import _fetch from '../tasks/fetch';
 
 export class SignUpScreen extends React.Component {
 
@@ -33,20 +34,13 @@ export class SignUpScreen extends React.Component {
     });
 
     try {
-      const response = await fetch(
-        'https://573f7f58.ngrok.io/users',
-        {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body
-        }
-      );
+      const json = await _fetch({
+        path: 'users',
+        method: 'POST',
+        auth: false,
+        body
+      });
 
-      const json = await response.json();
-      alert(JSON.stringify(json));
       if (!json.error) {
         this.props.navigation.navigate('SignIn');
       }

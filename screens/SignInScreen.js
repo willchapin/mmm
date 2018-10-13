@@ -9,6 +9,8 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import _fetch from '../tasks/fetch';
+
 export class SignInScreen extends React.Component {
 
   static navigationOptions = {
@@ -30,19 +32,12 @@ export class SignInScreen extends React.Component {
       password: this.state.password,
     });
 
-    const response = await fetch(
-      'https://4e08607d.ngrok.io/login',
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body
-      }
-    );
-
-    const json = await response.json();
+    const json = await _fetch({
+      path: 'login',
+      method: 'POST',
+      body: body,
+      auth: false
+    });
 
     if (json.userId && json.token) {
       await Promise.all([

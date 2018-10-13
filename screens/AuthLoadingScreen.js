@@ -5,6 +5,8 @@ import {
   View,
 } from 'react-native';
 
+import _fetch from '../tasks/fetch';
+
 export class AuthLoadingScreen extends React.Component {
 
   constructor(props) {
@@ -14,24 +16,12 @@ export class AuthLoadingScreen extends React.Component {
 
   _bootstrapAsync = async () => {
 
-    const [userId, token] = await Promise.all([
-      AsyncStorage.getItem('userId'),
-      AsyncStorage.getItem('token'),
-    ]);
+    const userId = await AsyncStorage.getItem('userId');
 
-    const loggedin = await fetch(
-      `https://4e08607d.ngrok.io/users/${userId}/auth`,
-      {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      }
-    );
-
-    const json = await loggedin.json();
+    const json = await _fetch({
+      path: `users/${userId}/auth`,
+      method: 'GET',
+    });
 
     this.props.navigation.navigate(json.auth ? 'Main' : 'Auth');
   };

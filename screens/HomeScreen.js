@@ -3,65 +3,9 @@ import { AsyncStorage, Button, Text, View, StyleSheet } from 'react-native';
 import { MinimalTextInput } from '../components/MinimalTextInput'
 
 export default class LinksScreen extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.initState = {
-      description: {
-        value: '',
-        error: null
-      },
-      cost: {
-        value: '',
-        error: null
-      },
-    };
-
-    this.state = this.initState;
-  }
-
   static navigationOptions = {
     header: null
   };
-
-  save = async () => {
-    const [userId, token] = await Promise.all([
-      AsyncStorage.getItem('userId'),
-      AsyncStorage.getItem('token'),
-    ]);
-
-    const response = await fetch(
-      `https://4e08607d.ngrok.io/users/${userId}/purchases`,
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          description: this.state.description.value,
-          cost: this.state.cost.value,
-          tagIds: [0,1,2] // TODO this
-        }),
-      }
-    );
-
-    const json = await response.json();
-
-    if (json.error) {
-      const newState = {...this.state};
-
-      json.error.details.forEach((error) => {
-        newState[error.path[0]].error = error.message;
-      });
-
-      this.setState(newState);
-    } else {
-      this.setState(this.initState);
-      this.props.navigation.navigate('ListStack');
-    }
-  }
 
   render() {
     return (
@@ -69,10 +13,10 @@ export default class LinksScreen extends React.Component {
         <Text style={styles.text}>I bought a </Text>
         <MinimalTextInput
           autoCorrect={false}
-          onChangeText={(description) => this.setState({description: { value: description }})}
+          onChangeText={(description) => this.props.screenProps.updateDescription(description)}
           placeholder='thing'
-          value={this.state.description.value}
-          error={this.state.description.error}
+          value={this.props.screenProps.description.value}
+          error={this.props.screenProps.description.error}
         />
         <Text style={styles.text}> for </Text>
         <MinimalTextInput 
@@ -81,13 +25,13 @@ export default class LinksScreen extends React.Component {
           keyboardType='numeric'
           returnKeyType='done'
           placeholder='0'
-          onChangeText={(cost) => this.setState({cost: { value: cost }})}
-          value={this.state.cost.value}
-          error={this.state.cost.error}
+          onChangeText={(cost) => this.props.screenProps.updateCost(cost)}
+          value={this.props.screenProps.cost.value}
+          error={this.props.screenProps.cost.error}
         />
         <Text style={styles.text}>cents just now.</Text>
         <Button
-          onPress={this.save}
+          onPress={this.props.screenProps.onSave}
           title="Save"
         >
         </Button>

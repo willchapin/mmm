@@ -1,50 +1,24 @@
 import React from 'react';
-import { AsyncStorage, Text, ScrollView, StyleSheet, FlatList, View } from 'react-native';
+import { Text, ScrollView, StyleSheet, FlatList, View } from 'react-native';
 
 export default class LinksScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      purchases: [],
-    };
-  }
-
   static navigationOptions = {
     header: null
   }
 
-  async componentDidMount() {
-    const [userId, token] = await Promise.all([
-      AsyncStorage.getItem('userId'),
-      AsyncStorage.getItem('token'),
-    ]);
+  formatDate = (timestamp) => {
+    const isoDate = new Date(timestamp).toISOString();
+    const [date, time] = isoDate.split('T');
+    const [h, m] = time.split(':');
 
-    const response = await fetch(
-      `https://4e08607d.ngrok.io/users/${userId}/purchases`,
-      {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      }
-    );
-
-    const json = await response.json();
-
-    if (!json.error) {
-      this.setState({
-        purchases: json,
-      });
-    }
+    return h + ':' + m + ' ' + date;
   }
   
   render() {
     return (
       <ScrollView style={styles.container}>
         <FlatList
-          data={this.state.purchases}
+          data={this.props.screenProps.purchases}
           renderItem={({item}) => {
             return (
               <View key={item.id} style={styles.row}>
@@ -52,10 +26,10 @@ export default class LinksScreen extends React.Component {
                   { item.cost }
                 </Text>
                 <Text style={styles.item}>
-                  { new Date(item.timestamp).toDateString() }
-                </Text>
-                <Text style={styles.item}>
                   { item.description }
+                </Text>
+                <Text style={{flex: 2}}>
+                  { this.formatDate(item.timestamp) }
                 </Text>
               </View>
             );
