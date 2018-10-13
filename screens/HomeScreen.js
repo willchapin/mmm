@@ -13,7 +13,7 @@ export default class LinksScreen extends React.Component {
         <Text style={styles.text}>I bought a </Text>
         <MinimalTextInput
           autoCorrect={false}
-          onChangeText={(description) => this.props.screenProps.updateDescription(description)}
+          onChangeText={(description) => this.props.screenProps.updateFieldValue('description', description)}
           placeholder='thing'
           value={this.props.screenProps.description.value}
           error={this.props.screenProps.description.error}
@@ -25,7 +25,7 @@ export default class LinksScreen extends React.Component {
           keyboardType='numeric'
           returnKeyType='done'
           placeholder='0'
-          onChangeText={(cost) => this.props.screenProps.updateCost(cost)}
+          onChangeText={(cost) => this.props.screenProps.updateFieldValue('cost', cost)}
           value={this.props.screenProps.cost.value}
           error={this.props.screenProps.cost.error}
         />

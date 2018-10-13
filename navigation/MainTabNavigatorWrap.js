@@ -7,32 +7,25 @@ import _fetch from '../tasks/fetch';
 export default class MainTabNavigatorWrap extends React.Component {
   static router = MainTabNavigator.router;
 
-  initialDescription = {
+  initialField = {
     value: '',
     error: null
-  };
-
-  initialCost = {
-    value: '',
-    error: null
-  };
+  }
 
   constructor(props) {
     super(props);
 
     this.state = {
       purchases: [],
-      description: {...this.initialDescription},
-      cost: {...this.initialCost}
+      description: {...this.initialField},
+      cost: {...this.initialField}
     };
   }
 
-  updateDescription = (description) => {
-    this.setState({description: {value: description}});
-  };
-
-  updateCost = (cost) => {
-    this.setState({cost: {value: cost}});
+  updateFieldValue = (name, value) => {
+    const newState = {};
+    newState[name] = {value};
+    this.setState(newState);
   };
 
   async componentDidMount() {
@@ -84,8 +77,8 @@ export default class MainTabNavigatorWrap extends React.Component {
 
     this.setState({
       purchases,
-      description: this.initialDescription,
-      cost: this.initialCost
+      description: {...this.initialField},
+      cost: {...this.initialField}
     });
   }
 
@@ -97,8 +90,7 @@ export default class MainTabNavigatorWrap extends React.Component {
           purchases: this.state.purchases,
           description: this.state.description,
           cost: this.state.cost,
-          updateDescription: this.updateDescription.bind(this),
-          updateCost: this.updateCost.bind(this),
+          updateFieldValue: this.updateFieldValue.bind(this),
           onSave: this.onSave.bind(this),
         }}
       />
