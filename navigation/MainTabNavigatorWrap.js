@@ -42,7 +42,7 @@ export default class MainTabNavigatorWrap extends React.Component {
   updateStateAndReset = (purchase) => {
     // add purchase and reset description / cost
     const purchases = [...this.state.purchases];
-    purchases.push(purchase);
+    purchases.unshift(purchase);
 
     this.setState({
       purchases,
