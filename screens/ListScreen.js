@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, ScrollView, StyleSheet, FlatList, View } from 'react-native';
+import { Text, ScrollView, StyleSheet, FlatList, SectionList, View } from 'react-native';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -17,24 +17,11 @@ export default class LinksScreen extends React.Component {
   render() {
     return (
       <ScrollView style={styles.container}>
-        <FlatList
-          data={this.props.screenProps.purchases}
-          renderItem={({item}) => {
-            return (
-              <View key={item.id} style={styles.row}>
-                <Text style={{flex: 1}}>
-                  { item.cost }
-                </Text>
-                <Text style={{flex: 1}}>
-                  { item.description }
-                </Text>
-                <Text style={{flex: 2}}>
-                  { this.formatDate(item.timestamp) }
-                </Text>
-              </View>
-            );
-          }}
-          keyExtractor={(item) => item.id.toString() }
+        <SectionList
+          sections={this.props.screenProps.purchases}
+          renderItem={({item}) => <Text style={styles.item}>{item.cost}¢ | {item.description}</Text>}
+          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+          keyExtractor={(_, index) => index}
         />
       </ScrollView>
     );
@@ -53,5 +40,8 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     flexDirection: 'row',
+  },
+  sectionHeader: {
+    fontWeight: 'bold',
   }
 });

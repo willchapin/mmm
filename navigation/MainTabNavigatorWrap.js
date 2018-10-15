@@ -78,8 +78,18 @@ export default class MainTabNavigatorWrap extends React.Component {
     }
   }
 
-  formatPurchases = (purchase) => {
-    return purchase;
+  formatPurchases = (purchases) => {
+    const byDate = {};
+
+    purchases.forEach((purchase) => {
+      const isoDate = new Date(purchase.timestamp).toISOString();
+      const date = isoDate.split('T')[0];
+
+      byDate[date] = byDate[date] || {title: date, data: []};
+      byDate[date].data.push(purchase);
+    });
+
+    return Object.values(byDate);
   }
 
   render() {
@@ -90,7 +100,7 @@ export default class MainTabNavigatorWrap extends React.Component {
           purchases: this.formatPurchases(this.state.purchases),
           description: this.state.description,
           cost: this.state.cost,
-          updateFieldValue: (name, value) => {this.setState({[name]: value})},
+          updateFieldValue: (name, value) => {this.setState({[name]: {value}})},
           onSave: this.onSave,
         }}
       />
