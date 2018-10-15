@@ -1,11 +1,25 @@
 import React from 'react';
 import { Button, Text, View, StyleSheet } from 'react-native';
 import { MinimalTextInput } from '../components/MinimalTextInput'
+import { TagInput } from '../components/TagInput'
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
+
+  createTagInputs = () => {
+    const tagNames = [...this.props.screenProps.tagNames, ''];
+    return tagNames.map((name, index) => {
+      return (
+        <TagInput
+          key={index}
+          value={name}
+          onChangeText={(value) => {this.props.screenProps.onChangeText(index, value)}}
+        />
+      )
+    });
+  }
 
   render() {
     return (
@@ -32,6 +46,7 @@ export default class LinksScreen extends React.Component {
           />
           <Text style={styles.text}> cents just now.</Text>
         </View>
+        {this.createTagInputs()}
         <Button
           onPress={this.props.screenProps.onSave}
           title="Save"
@@ -44,14 +59,12 @@ export default class LinksScreen extends React.Component {
 
 const styles = StyleSheet.create({
   outerContainer: {
-    flex: 1,
     padding: 15,
     backgroundColor: '#6bbce5',
     width: '100%',
     height: '100%',
   },
   innerContainer: {
-    flex: 1,
     padding: 15,
     flexDirection: 'row',
     flexWrap: 'wrap',

@@ -19,8 +19,9 @@ export default class MainTabNavigatorWrap extends React.Component {
 
     this.state = {
       purchases: [],
+      tagNames: [],
       description: this.getInitialField(),
-      cost: this.getInitialField()
+      cost: this.getInitialField(),
     };
   }
 
@@ -47,7 +48,8 @@ export default class MainTabNavigatorWrap extends React.Component {
     this.setState({
       purchases,
       description: this.getInitialField(),
-      cost: this.getInitialField()
+      cost: this.getInitialField(),
+      tagNames: []
     });
   }
 
@@ -60,7 +62,7 @@ export default class MainTabNavigatorWrap extends React.Component {
       body: JSON.stringify({
         description: this.state.description.value,
         cost: this.state.cost.value,
-        tagIds:[1,2,3],
+        tagNames: this.state.tagNames,
       }),
     });
 
@@ -92,6 +94,18 @@ export default class MainTabNavigatorWrap extends React.Component {
     return Object.values(byDate);
   }
 
+  onChangeText = (index, tagName) => {
+    let tagNames = this.state.tagNames;
+
+    if (!tagName) { 
+      tagNames.splice(index, 1);
+    } else {
+      tagNames[index] = tagName;
+    }
+
+    this.setState({tagNames});
+  }
+
   render() {
     return (
       <MainTabNavigator
@@ -100,8 +114,10 @@ export default class MainTabNavigatorWrap extends React.Component {
           purchases: this.formatPurchases(this.state.purchases),
           description: this.state.description,
           cost: this.state.cost,
-          updateFieldValue: (name, value) => {this.setState({[name]: {value}})},
+          tagNames: this.state.tagNames,
           onSave: this.onSave,
+          updateFieldValue: (name, value) => {this.setState({[name]: {value}})},
+          onChangeText: this.onChangeText
         }}
       />
     );
